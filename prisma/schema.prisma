@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String             @id @default(uuid())
+  username          String
+  email             String             @unique
+  password          String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  pessoaFisica      PessoaFisica?
+  pessoaJuridica    PessoaJuridica?
+  federatedIdentity FederatedIdentity?
+  phone             Phone?
+  address           Address?
+}
+
+model PessoaFisica {
+  id          String   @id @default(uuid())
+  cpf         String   @db.VarChar(14)
+  gender      String
+  dateOfBirth DateTime
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+}
+
+model PessoaJuridica {
+  id              String @id @default(uuid())
+  cnpj            String @db.VarChar(18)
+  corporateReason String
+  user            User   @relation(fields: [userId], references: [id])
+  userId          String @unique
+}
+
+model FederatedIdentity {
+  id           String       @id @default(uuid())
+  sub          String
+  providerType ProviderType @default(LOCAL)
+  user         User         @relation(fields: [userId], references: [id])
+  userId       String       @unique
+}
+
+enum ProviderType {
+  GOOGLE
+  GITHUB
+  LOCAL
+}
+
+model Phone {
+  id          String @id @default(uuid())
+  phoneDDD    String
+  countryCode String
+  phoneNumber String
+  user        User   @relation(fields: [userId], references: [id])
+  userId      String @unique
+}
+
+model Address {
+  id                String  @id @default(uuid())
+  addressName       String
+  addressCep        String
+  addressNumber     String
+  addressComplement String?
+  addressBurgh      String
+  addressState      String
+  addressCity       String
+  user              User    @relation(fields: [userId], references: [id])
+  userId            String  @unique
+}
