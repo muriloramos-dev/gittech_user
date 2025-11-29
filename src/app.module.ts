@@ -5,8 +5,9 @@ import { UserModule } from './user/user.module';
 import { TokenService } from './token/token.service';
 import { CookieService } from './cookie/cookie.service';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [AuthModule, UserModule, JwtModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule, UserModule, JwtModule],
   controllers: [],
   providers: [PrismaService, TokenService, CookieService],
 })

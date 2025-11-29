@@ -1,9 +1,11 @@
 export class TokenAuth {
     accessToken: string;
     refreshToken: string;
+    userId: string;
 
-    constructor(accessToken: string, refreshToken: string) {
+    constructor(accessToken: string, refreshToken: string, userId: string) {
         this.accessToken = accessToken;
-        this.refreshToken = refreshToken
+        this.refreshToken = refreshToken;
+        this.userId = userId;
     }
 }

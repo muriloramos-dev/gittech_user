@@ -8,6 +8,7 @@ async function bootstrap() {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'], // adiciona todos os níveis de log
   });
   app.use(cookieParser());
+  
 
     app.enableCors({
     origin: 'http://localhost:3000',

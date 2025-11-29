@@ -16,7 +16,7 @@ export class AuthService {
     if (await bcrypt.compare(password, user!.password)) {
       const accessToken: string = await this.tokenService.generateAccessToken(user.id, user.username, user.email);
       const refreshToken: string = await this.tokenService.generateRefreshToken(user.id, user.username, user.email);
-      return new TokenAuth(accessToken, refreshToken);
+      return new TokenAuth(accessToken, refreshToken, user.id);
     }
     throw new BadRequestException();
   }
@@ -89,6 +89,12 @@ export class AuthService {
           }
         }
       }
+    });
+  }
+
+  async findUserById(userId: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { id: userId },
     });
   }
 }
